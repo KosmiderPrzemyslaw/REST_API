@@ -17,6 +17,9 @@ document.addEventListener("DOMContentLoaded", function () {
         const remove = document.createElement("td");
         remove.innerHTML = "<button id='remove' class='remove'>Remove</button>"
 
+        const edit = document.createElement("td");
+        edit.innerHTML = "<button id='edit' class='edit'>Edit</button>"
+
 
 
         // const button = $('.remove').find("button");
@@ -26,6 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
         row.appendChild(author)
         row.appendChild(publisher)
         row.appendChild(remove)
+        row.appendChild(edit)
 
         tbody.appendChild(row)
 
