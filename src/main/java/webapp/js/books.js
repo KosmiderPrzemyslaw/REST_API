@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     const tbody = document.querySelector("tbody")
 
+
     function addBookToDom(book) {
         const row = document.createElement("tr")
 
@@ -13,52 +14,28 @@ document.addEventListener("DOMContentLoaded", function () {
         const publisher = document.createElement("td")
         publisher.innerText = book.publisher
 
-        const bookId = book.id;
-        const remove = document.createElement("td");
-        remove.innerHTML = "<button id='remove' class='remove'>Remove</button>"
+
+        const removeTd = document.createElement("td");
+        const removeButton = document.createElement("button");
+        removeButton.dataset.id = book.id;
+        removeButton.innerText = "remove";
+        removeButton.className = "remove";
+
+        removeTd.appendChild(removeButton);
 
         const edit = document.createElement("td");
+
         edit.innerHTML = "<button id='edit' class='edit'>Edit</button>"
 
-
-
-        // const button = $('.remove').find("button");
 
 
         row.appendChild(title)
         row.appendChild(author)
         row.appendChild(publisher)
-        row.appendChild(remove)
+        row.appendChild(removeTd)
         row.appendChild(edit)
 
         tbody.appendChild(row)
-
-        // $(".remove").find("button").on("click", function (e) {
-        //     e.preventDefault();
-        //     alert("click")
-        // })
-
-        const table = $(".table");
-        const button = table.find('button');
-       // console.log(books);
-
-        button.on("click", function () {
-
-           $.ajax({
-               url: "http://localhost:8282/books/" + book,
-               type: "DELETE",
-               dataType: "json",
-               data: {
-                   id: bookId
-               },
-               success: function (response) {
-                   alert(response)
-               },
-               error: function (response) {
-                   console.log(response);
-               }
-           })
-        })
 
     }
 
@@ -76,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
             title: title.value,
             author: author.value,
             publisher: publisher.value,
-            id: book.id
+
             //type: typeForm.value
         }
 
@@ -102,4 +79,17 @@ document.addEventListener("DOMContentLoaded", function () {
         response.forEach(addBookToDom)
     })
 
+    var removeElement = $('tbody')
+    console.log(removeElement)
+    removeElement.on('click', '.remove', function () {
+        console.log('product clicked');
+        var id = this.dataset.id;
+        console.log(id);
+        $.ajax({
+            url: "http://localhost:8282/books" + "/" + id,
+            method: "DELETE"
+        }).done(() => {
+            history.go(0);
+        });
+    });
 })
