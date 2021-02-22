@@ -1,4 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
+
+
     const tbody = document.querySelector("tbody")
 
 
@@ -23,17 +25,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
         removeTd.appendChild(removeButton);
 
-        const edit = document.createElement("td");
+        const editTd = document.createElement("td");
+        const editButton = document.createElement("button")
+        editButton.dataset.id = book.id;
+        editButton.innerText = "edit";
+        editButton.className = "edit";
 
-        edit.innerHTML = "<button id='edit' class='edit'>Edit</button>"
-
+        editTd.appendChild(editButton);
 
 
         row.appendChild(title)
         row.appendChild(author)
         row.appendChild(publisher)
         row.appendChild(removeTd)
-        row.appendChild(edit)
+        row.appendChild(editTd)
 
         tbody.appendChild(row)
 
@@ -82,7 +87,6 @@ document.addEventListener("DOMContentLoaded", function () {
     var removeElement = $('tbody')
     console.log(removeElement)
     removeElement.on('click', '.remove', function () {
-        console.log('product clicked');
         var id = this.dataset.id;
         console.log(id);
         $.ajax({
@@ -92,4 +96,33 @@ document.addEventListener("DOMContentLoaded", function () {
             history.go(0);
         });
     });
+
+    var editElement = $('tbody')
+    editElement.on('click', '.edit', function () {
+        event.preventDefault();
+        var id = this.dataset.id;
+        console.log(id)
+
+        const formBook = {
+            // isbn: isbnForm.value,
+            title: title.value,
+            author: author.value,
+            publisher: publisher.value,
+
+            //type: typeForm.value
+        }
+
+        $.ajax({
+            url: 'http://localhost:8282/books/' + id,
+            data: '{"id":"1","isbn":"11111", "title":"Thinking in Java"}'
+            ,
+            contentType: "application/json"
+            ,
+            method: "PUT"
+        }).done(function () {
+            alert('PUT completed');
+        });
+    })
+
+
 })

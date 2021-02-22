@@ -19,6 +19,7 @@ implements ContainerResponseFilter {
 		//headers.add("Access-Control-Allow-Origin", "http://example.org"); //allows CORS requests only coming from example.org	
 		headers.add("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");			
 		headers.add("Access-Control-Allow-Headers", "X-Requested-With, Content-Type");
+		headers.add("Access-Control-Allow-Headers", "http://localhost:63342'");
 	}
 
 }
