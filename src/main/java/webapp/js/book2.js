@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
         publisher.innerText = book.publisher;
 
         const removeTD = document.createElement("td");
-        const removeA = document.createElement("button");
+        const removeA = document.createElement("a");
         removeA.innerText = "remove";
         removeA.dataset.id = book.id;
         removeA.className = "remove";
@@ -101,5 +101,4 @@ document.addEventListener("DOMContentLoaded", function () {
             location.reload(false);
         });
     });
-
 });

@@ -2,32 +2,39 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     const tbody = document.querySelector("tbody")
-
+    const URL = "http://localhost:8282/books"
 
     function addBookToDom(book) {
         const row = document.createElement("tr")
-
         const title = document.createElement("td")
+        const publisher = document.createElement("td")
+        const removeButton = document.createElement("button");
+        const author = document.createElement("td")
+
+        removeButton.dataset.id = book.id;
         title.innerText = book.title
 
-        const author = document.createElement("td")
         author.innerText = book.author
-
-        const publisher = document.createElement("td")
         publisher.innerText = book.publisher
-
-
         const removeTd = document.createElement("td");
-        const removeButton = document.createElement("button");
-        removeButton.dataset.id = book.id;
         removeButton.innerText = "remove";
         removeButton.className = "remove";
-
         removeTd.appendChild(removeButton);
+
+        removeButton.addEventListener("click", function () {
+            $.getJSON({
+                url: URL + `${this.dataset.id}`
+            }).done(response => {
+                console.log('response' + response);
+                var book = JSON.parse(JSON.stringify(response));
+
+            })
+        })
 
         const editTd = document.createElement("td");
         const editButton = document.createElement("button")
-        editButton.dataset.id = book.id;
+        //editButton.dataset.id = book.id;
+        editButton.setAttribute("id", book.id);
         editButton.innerText = "edit";
         editButton.className = "edit";
 
@@ -51,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var publisher = document.querySelector('#publisher');
 
 
-    button.addEventListener("click", function (event) {
+    $(button).on("click", function (event) {
         event.preventDefault()
         const formBook = {
             // isbn: isbnForm.value,
@@ -90,10 +97,11 @@ document.addEventListener("DOMContentLoaded", function () {
         var id = this.dataset.id;
         console.log(id);
         $.ajax({
-            url: "http://localhost:8282/books" + "/" + id,
+            url: URL + "/" + id,
             method: "DELETE"
         }).done(() => {
-            history.go(0);
+            location.reload(false);
+            //history.go(0);
         });
     });
 
