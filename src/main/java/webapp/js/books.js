@@ -10,24 +10,34 @@ document.addEventListener("DOMContentLoaded", function () {
         const publisher = document.createElement("td")
         const removeButton = document.createElement("button");
         const author = document.createElement("td")
+        const titleHref = document.createElement("a");
+        const titleDiv = document.createElement("div");
+        title.appendChild(titleHref);
 
+        titleHref.dataset.id = book.id;
+        titleHref.innerText = book.title;
+
+        $(titleHref).css('cursor', 'pointer');
+
+        titleDiv.className = ("hidden");
         removeButton.dataset.id = book.id;
-        title.innerText = book.title
 
-        author.innerText = book.author
-        publisher.innerText = book.publisher
+        author.innerText = book.author;
+        publisher.innerText = book.publisher;
         const removeTd = document.createElement("td");
         removeButton.innerText = "remove";
         removeButton.className = "remove";
         removeTd.appendChild(removeButton);
 
-        removeButton.addEventListener("click", function () {
+        titleHref.addEventListener("click", function () {
             $.getJSON({
-                url: URL + `${this.dataset.id}`
+                url: URL + `/${this.dataset.id}`,
             }).done(response => {
                 console.log('response' + response);
                 var book = JSON.parse(JSON.stringify(response));
-
+                titleDiv.innerText = 'publisher: ' + book.publisher + '\n' +
+                    'author: ' + book.author;
+                titleDiv.classList.toggle("hidden")
             })
         })
 
@@ -48,6 +58,7 @@ document.addEventListener("DOMContentLoaded", function () {
         row.appendChild(editTd)
 
         tbody.appendChild(row)
+        tbody.appendChild(titleDiv);
 
     }
 
@@ -58,37 +69,41 @@ document.addEventListener("DOMContentLoaded", function () {
     var publisher = document.querySelector('#publisher');
 
 
-    $(button).on("click", function (event) {
+    $(button).on('click', function (event) {
+
+        var title = $("#title").val();
+        var author = $("#author").val();
+        var publisher = $("#publisher").val();
+
         event.preventDefault()
         const formBook = {
-            // isbn: isbnForm.value,
-            title: title.value,
-            author: author.value,
-            publisher: publisher.value,
-
-            //type: typeForm.value
-        }
+            "title": title,
+            "author": author,
+            "publisher": publisher
+        };
 
         $.post({
-            url: "http://localhost:8282/books",
+            url: URL,
             data: JSON.stringify(formBook),
             headers: {
                 'Content-Type': 'application/json'
             }
         }).done(() => {
+            history.go(0);
             console.log("Książka dodana!")
         }).fail(() => {
             console.log("Nie udało się dodać książki")
         })
-        addBookToDom(formBook)
+        // addBookToDom(formBook)
     })
 
 
     // ASYNCHRONICZNOŚĆ
     $.get({
-        url: "http://localhost:8282/books"
+        url: URL
     }).done(response => {
         response.forEach(addBookToDom)
+        console.log(response)
     })
 
     var removeElement = $('tbody')
@@ -100,15 +115,14 @@ document.addEventListener("DOMContentLoaded", function () {
             url: URL + "/" + id,
             method: "DELETE"
         }).done(() => {
-            location.reload(false);
-            //history.go(0);
+            history.go(0);
         });
     });
 
     var editElement = $('tbody')
     editElement.on('click', '.edit', function () {
+        $.put()
         event.preventDefault();
-        var id = this.dataset.id;
         console.log(id)
 
         const formBook = {
@@ -128,9 +142,8 @@ document.addEventListener("DOMContentLoaded", function () {
             ,
             method: "PUT"
         }).done(function () {
+            history.go(0);
             alert('PUT completed');
         });
     })
-
-
 })
