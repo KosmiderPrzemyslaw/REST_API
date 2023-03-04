@@ -56,6 +56,7 @@ public class BookService {
         if (book.getId() != id) {
             throw new NotFoundException(new JsonError("Error", "Request id is not equal book.id"));
         }
+
         Optional<Book> match = cList.stream().filter(c -> c.getId() == id).findFirst();
         if (match.isPresent()) {
             matchIdx = cList.indexOf(match.get());

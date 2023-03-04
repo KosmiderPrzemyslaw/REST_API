@@ -16,7 +16,8 @@ public class BookExceptionMapper implements ExceptionMapper<javax.validation.Val
 		for (ConstraintViolation<?> cv : ((ConstraintViolationException) e).getConstraintViolations()) {
 			strBuilder.append(cv.getPropertyPath().toString() + " " + cv.getMessage());
 		}
-		return Response.status(Response.Status.BAD_REQUEST).entity(new JsonError("Validation", strBuilder.toString())).type(MediaType.APPLICATION_JSON).build();
+		return Response.status(Response.Status.BAD_REQUEST).entity(new JsonError("Validation",
+				strBuilder.toString())).type(MediaType.APPLICATION_JSON).build();
 
 	}
 }

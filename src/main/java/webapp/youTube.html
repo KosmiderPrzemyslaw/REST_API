@@ -3,8 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <meta name="viewport" content="width=device-width">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.2/css/jquery.dataTables.css"/>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.js"></script>
+    <script src="js/youTube.js" type="text/javascript"></script>
+
 </head>
 <body>
+<div>
+    <table align="center" id="datatable" border="1">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>ISBN</th>
+            <th>Author</th>
+            <th>Publisher</th>
+            <th>Type</th>
+            <th colspan="2">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <form>
+        <table align="center">
+
+
+            <td><input type="text" id="txtId" hidden></td>
+            <tr>
+                <td>Title</td>
+                <td><input type="text" id="title"></td>
+            </tr>
+            <tr>
+                <td>ISBN</td>
+                <td><input type="text" id="isbn"></td>
+            </tr>
+            <tr>
+                <td>Author</td>
+                <td><input type="text" id="author"></td>
+            </tr>
+            <tr>
+                <td>Publisher</td>
+                <td><input type="text" id="publisher"></td>
+            </tr>
+            <tr>
+                <td>Type</td>
+                <td><input type="text" id="type"></td>
+            </tr>
+            <tr colspan="2">
+                <td><input type="button" value="Add Book" id="btnAddBook"></td>
+                <td><input type="button" value="Clear Form" id="clearForm"></td>
+            </tr>
+
+        </table>
+    </form>
+</div>
 
 </body>
 </html>

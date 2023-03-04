@@ -1,8 +1,9 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-
-    const tbody = document.querySelector("tbody")
-    const URL = "http://localhost:8282/books"
+    let methodName = "";
+    let dynaMicUrl = "";
+    const tbody = document.querySelector("tbody");
+    const URL = "http://localhost:8282/books/";
 
     function addBookToDom(book) {
         const row = document.createElement("tr")
@@ -63,19 +64,44 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    var button = document.querySelector('button');
+    var button = document.querySelector('#submitForm');
     var title = document.querySelector('#title');
     var author = document.querySelector('#author');
     var publisher = document.querySelector('#publisher');
 
-
+    let book = {};
     $(button).on('click', function (event) {
 
-        var title = $("#title").val();
-        var author = $("#author").val();
-        var publisher = $("#publisher").val();
+        book.title = $("#title").val();
+        book.author = $("#author").val();
+        book.publisher = $("#publisher").val();
+        let bookId = $('#txtId').val();
 
-        event.preventDefault()
+        if (bookId) {
+            dynaMicUrl = URL + bookId;
+            methodName = "PUT";
+        } else {
+            dynaMicUrl = URL;
+            methodName = 'POST'
+        }
+        let bookObj = JSON.stringify(book);
+
+
+        //event.preventDefault();
+
+        $.ajax({
+            url: dynaMicUrl,
+            method: methodName,
+            data: bookObj,
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+        }).done(() => {
+            alert("Data is saved succesfully")
+        }).fail(error => {
+            alert(error)
+        })
         const formBook = {
             "title": title,
             "author": author,
@@ -95,19 +121,19 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log("Nie udało się dodać książki")
         })
         // addBookToDom(formBook)
-    })
+    });
 
 
     // ASYNCHRONICZNOŚĆ
     $.get({
         url: URL
     }).done(response => {
-        response.forEach(addBookToDom)
+        response.forEach(addBookToDom);
         console.log(response)
-    })
+    });
 
     var removeElement = $('tbody')
-    console.log(removeElement)
+    console.log(removeElement);
     removeElement.on('click', '.remove', function () {
         var id = this.dataset.id;
         console.log(id);
@@ -115,35 +141,40 @@ document.addEventListener("DOMContentLoaded", function () {
             url: URL + "/" + id,
             method: "DELETE"
         }).done(() => {
+            //window.location.reload();
             history.go(0);
+            //alert("book" + id + " deleted")
         });
     });
 
-    var editElement = $('tbody')
-    editElement.on('click', '.edit', function () {
-        $.put()
-        event.preventDefault();
-        console.log(id)
 
-        const formBook = {
-            // isbn: isbnForm.value,
-            title: title.value,
-            author: author.value,
-            publisher: publisher.value,
+    // var editElement = $('tbody')
+    // editElement.on('click', '.edit', function () {
+    //    console.log(this)
+    //
+    // })
 
-            //type: typeForm.value
-        }
+    let tableId = $('#tableId tbody');
 
-        $.ajax({
-            url: 'http://localhost:8282/books/' + id,
-            data: '{"id":"1","isbn":"11111", "title":"Thinking in Java"}'
-            ,
-            contentType: "application/json"
-            ,
-            method: "PUT"
-        }).done(function () {
-            history.go(0);
-            alert('PUT completed');
-        });
+    tableId.on('click', '.edit', function (element) {
+        update(this.id);
     })
-})
+    console.log(tableId);
+
+    function update(id) {
+        $.ajax({
+            url: URL + id,
+            method: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                $('#title').val(data.title);
+                $('#author').val(data.author);
+                $('#publisher').val(data.publisher);
+                $('#txtId').val(data.id);
+            },
+            error: function (error) {
+                alert(error);
+            }
+        })
+    }
+});

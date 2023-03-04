@@ -10,10 +10,9 @@
 <body>
 
 <div class="container">
-    <h1 class="col-xs-12 col-sm-6 col-sm-offset-1">Form Add New Book:</h1>
+    <h1 class="col-xs-12 col-sm-6 col-sm-offset-1">Form Add New Book(books.html):</h1>
 </div>
 <div class="container">
-
     <form id="addBook">
         <div class="form-group">
             <label>Title:</label>
@@ -27,6 +26,10 @@
             <label>Publisher:</label>
             <input id="publisher" class="form-control">
         </div>
+        <div class="form-group">
+            <label>Id:</label>
+            <input id="txtId" class="form-control">
+        </div>
 
         <button id="submitForm" class="btn btn-primary">Submit</button>
 
@@ -35,9 +38,9 @@
 </div>
 <div class="container">
     <div class="col-xs-12 col-sm-6 col-sm-offset-3">
-        <table class="table table-bordered">
+        <table id="tableId" class="table table-bordered">
             <tr>
-                <td colspan="5">Książki</td>
+                <td colspan="5" align="center">Książki</td>
             </tr>
             <tr>
                 <th>Tytuł</th>

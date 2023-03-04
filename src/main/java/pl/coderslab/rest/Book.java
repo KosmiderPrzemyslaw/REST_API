@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 
 public class Book {
-  private  long id;
+  private long id;
   private final String isbn;
   @NotNull()
   @Length(min = 2)
@@ -17,6 +17,7 @@ public class Book {
   private final String publisher;
   private final String type;
 
+
   private Book(BookBuilder builder){
     this.id = builder.id;
     this.isbn = builder.isbn;
@@ -24,6 +25,7 @@ public class Book {
     this.author = builder.author;
     this.publisher = builder.publisher;
     this.type = builder.type;
+
   }
   
   public Book(){

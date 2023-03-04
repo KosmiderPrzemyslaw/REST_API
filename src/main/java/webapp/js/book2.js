@@ -98,7 +98,24 @@ document.addEventListener("DOMContentLoaded", function () {
             url: URL + "/" + id,
             method: "DELETE"
         }).done(() => {
-            location.reload(false);
+            getAllBooks();
         });
     });
+
+    function getAllBooks() {
+        $.ajax({
+            url: URL,
+            method: "GET",
+            dataType: "json",
+            success: function (data) {
+                //tbody.empty();
+                $(data).each(function (index, element) {
+                    tbody.append('<tr><td>' + element.title + '</td><td>' + element.author + '</td><td>' + element.publisher + '</td></tr>');
+                })
+            },
+            error: function (error) {
+                alert(error);
+            }
+        })
+    }
 });
