@@ -52,6 +52,7 @@ $(document).ready(function () {
         }).done((dataBookFromDB) => {
             let tbody = $("#datatable tbody")
             tbody.empty();
+
             printAllBooksFromDb(dataBookFromDB, tableBody)
         }).fail(error => {
             alert(error)

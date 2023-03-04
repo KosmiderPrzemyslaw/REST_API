@@ -2,9 +2,79 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>$Title$</title>
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.2/css/jquery.dataTables.css"/>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var book = {};
+            getAllBooks();
+            $("#btnAddBook").click(function () {
+                book.title = $("#txtTitle").val();
+                book.author = $("#txtAuthor").val();
+
+                var bookObj = JSON.stringify(book);
+
+                $.ajax({
+                    url: "http://localhost:8282/books/",
+                    method: "POST",
+                    data: bookObj,
+                    contentType: 'application/json; charset=utf-8',
+
+                }).done(function () {
+                    alert('Saved successfully');
+                    getAllBooks();
+                }).fail(function (error) {
+                    alert(error)
+                })
+            })
+
+        })
+
+        function getAllBooks() {
+            $.ajax({
+                url: "http://localhost:8282/books/",
+                method: "GET",
+                dataType: "json"
+            }).done(function (data) {
+                var tableBody = $("#tableBook tbody");
+                tableBody.empty();
+                $(data).each(function (index, element) {
+                    tableBody.append('<tr><td>' + element.title + '</td><td>' + element.author + '</td></tr>')
+                })
+            }).fail(function (error) {
+                alert(error)
+            })
+        }
+    </script>
 </head>
 <body>
-$END$
+<div>
+    <table>
+        <tr>
+            <td>Title</td>
+            <td><input type="text" id="txtTitle"></td>
+        </tr>
+        <tr>
+            <td>Author</td>
+            <td><input type="text" id="txtAuthor"></td>
+        </tr>
+        <tr colspan="2">
+            <td><input type="button" value="Add Book" id="btnAddBook"></td>
+        </tr>
+    </table>
+    <table border="1" id="tableBook">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Author</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+</div>
 </body>
 </html>
