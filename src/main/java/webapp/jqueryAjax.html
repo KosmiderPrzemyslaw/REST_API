@@ -9,28 +9,43 @@
     <script type="text/javascript">
         $(document).ready(function () {
             var book = {};
+            var dynamicUrl = "";
+            var methodName = "";
+            var divElement = document.createElement("div");
+            divElement.className("hidden");
+
             getAllBooks();
             $("#btnAddBook").click(function () {
                 book.title = $("#txtTitle").val();
                 book.author = $("#txtAuthor").val();
+                book.id = $("#txtId").val();
+
+                if (book.id) {
+                    dynamicUrl = "http://localhost:8282/books/" + book.id;
+                    methodName = "PUT";
+                } else {
+                    dynamicUrl = "http://localhost:8282/books/";
+                    methodName = "POST";
+                }
 
                 var bookObj = JSON.stringify(book);
 
                 $.ajax({
-                    url: "http://localhost:8282/books/",
-                    method: "POST",
+                    url: dynamicUrl,
+                    method: methodName,
                     data: bookObj,
                     contentType: 'application/json; charset=utf-8',
 
                 }).done(function () {
                     alert('Saved successfully');
                     getAllBooks();
+                    reset();
                 }).fail(function (error) {
                     alert(error)
                 })
             })
 
-        })
+        });
 
         function getAllBooks() {
             $.ajax({
@@ -41,17 +56,56 @@
                 var tableBody = $("#tableBook tbody");
                 tableBody.empty();
                 $(data).each(function (index, element) {
-                    tableBody.append('<tr><td>' + element.title + '</td><td>' + element.author + '</td></tr>')
+                    tableBody.append('<tr><td>' + element.title + '</td><td>' + element.author + '</td>' +
+                        '<td><button onclick="deleteBook(' + element.id + ')">DELETE</button> | <button onclick="updateBook(' + element.id + ')">UPDATE</button></td></tr>')
                 })
+
+
             }).fail(function (error) {
                 alert(error)
             })
         }
-    </script>
+
+        function deleteBook(id) {
+            $.ajax({
+                url: "http://localhost:8282/books/" + id,
+                method: "DELETE"
+            }).done(function () {
+                alert('Record has been deleted');
+                getAllBooks();
+            }).fail(function (error) {
+                alert(error);
+            })
+        }
+
+        function reset() {
+            $("#txtTitle").val("");
+            $("#txtAuthor").val("");
+            $("#txtId").val("");
+        }
+
+        function updateBook(id) {
+            $.ajax({
+                url: "http://localhost:8282/books/" + id,
+                method: "GET",
+                dataType: 'json'
+            }).done(function (data) {
+                $('#txtTitle').val(data.title);
+                $('#txtAuthor').val(data.author);
+                $('#txtId').val(data.id);
+                getAllBooks();
+            }).fail(function (error) {
+                alert(error);
+            })
+        }
+
+           </script>
 </head>
 <body>
 <div>
     <table>
+        <td><input type="text" id="txtId" hidden></td>
+
         <tr>
             <td>Title</td>
             <td><input type="text" id="txtTitle"></td>
@@ -64,11 +118,13 @@
             <td><input type="button" value="Add Book" id="btnAddBook"></td>
         </tr>
     </table>
+
     <table border="1" id="tableBook">
         <thead>
         <tr>
             <th>Title</th>
             <th>Author</th>
+            <th>Actions</th>
         </tr>
         </thead>
         <tbody>
