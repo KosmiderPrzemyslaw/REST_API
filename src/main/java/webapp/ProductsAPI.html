@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.2/css/jquery.dataTables.css"/>
     <script src="js/jquery-3.4.1.min.js"></script>
-    <script src="product.js" type="text/javascript"></script>
 
 </head>
 <body>
@@ -32,19 +32,104 @@
     <div class="col-md-12">
 
         <button class="btn btn-primary" onclick="saveProduct()">Save product</button>
-        <button class="btn btn-danger">Reset</button>
+        <button class="btn btn-danger" onclick="clear()">Reset</button>
     </div>
 </div>
+<div class="table">
+    <table class="table table-striped" align="center" border="1">
+        <thead>
+        <tr>
+            <th scope="col">Product name</th>
+            <th scope="col">Price</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Delete</th>
+            <th scope="col">Update</th>
+        </tr>
+        </thead>
+        <tbody id="tbodyId">
 
+        </tbody>
+    </table>
+</div>
 </body>
 </html>
 
 <script>
+    const url = "http://localhost:8282/products";
+    const tableBody = $('#tbodyId');
+    getAllProducts();
+
     function saveProduct() {
-        const url = "http://localhost:8282/products";
+
         let objProduct = {};
-        objProduct.name = $('#txtProductName');
-        objProduct.price = $('#priceId');
-        objProduct.quantity = $('#quantity');
+        objProduct.name = $('#txtProductName').val();
+        objProduct.price = $('#priceId').val();
+        objProduct.quantity = $('#quantity').val();
+
+        if (objProduct) {
+            $.post({
+                url: url,
+                contentType: 'application/json',
+                dataType: "json",
+                data: JSON.stringify(objProduct),
+            }).done(() => {
+                alert("Data is saved successfully")
+                getAllProducts();
+            }).fail(error => {
+                alert(error)
+            })
+        }
     }
+
+    function clear() {
+        $('#txtProductName').val("");
+        $('#priceId').val("");
+        $('#quantity').val("");
+    }
+
+    function getAllProducts() {
+        $.get({
+            url: url,
+            contentType: "application/json",
+            dataType: "json"
+        }).done(function (data) {
+            createTable(data);
+        }).fail(function (error) {
+            alert(error)
+        })
+
+    }
+
+    function createTable(data) {
+
+        tableBody.empty();
+        $(data).each(function (index, element) {
+            tableBody.append("<tr><td>" + element.name + "</td>" +
+                "<td>" + element.price + "</td>" +
+                "<td align='center'>" + element.quantity + "</td>" +
+                "<td><button class='btn btn-primary' id='deleteButton'>Delete</button> </td>" +
+                "<td><button class='btn btn-warning' id='updateButton'>Update</button> </td>" +
+                "<td hidden id='id' data-id=" + element.id + "></td></tr>")
+        })
+    }
+
+    function deleteProduct(id) {
+        $.ajax({
+            url: url + id,
+            method: "DELETE",
+        }).done(() => {
+            alert("Element delete from database")
+            getAllProducts();
+        })
+    }
+
+    tableBody.on('click', '#deleteButton', function () {
+        let td = this.parentElement;
+        let tr = td.parentElement;
+        let lastElChild = tr.lastElementChild;
+        let value = lastElChild.dataset("id");
+        console.log(value);
+
+    })
+
 </script>
