@@ -32,7 +32,7 @@
     <div class="col-md-12">
 
         <button class="btn btn-primary" onclick="saveProduct()">Save product</button>
-        <button class="btn btn-danger" onclick="clear()">Reset</button>
+        <button class="btn btn-danger" id="reset-button">Reset</button>
     </div>
 </div>
 <div class="table">
@@ -50,6 +50,25 @@
 
         </tbody>
     </table>
+</div>
+<div>
+    <table class="table updateTable" id="tableToUpdate" align="center" border="1">
+        <thead>
+        <tr>
+            <td>Product name</td>
+            <td>Quantity</td>
+            <td>Price</td>
+        </tr>
+        </thead>
+        <tbody id="updateTbody">
+        <tr>
+            <td><input type="text" id="productNameUpdate" placeholder="Product name"></td>
+            <td><input type="text" id="quantityUpdate" placeholder="Quantity"></td>
+            <td><input type="text" id="priceUpdate" placeholder="Price"></td>
+        </tr>
+        </tbody>
+    </table>
+    <button class="btn btn-primary" id="update">Save changes</button>
 </div>
 </body>
 </html>
@@ -81,11 +100,13 @@
         }
     }
 
-    function clear() {
-        $('#txtProductName').val("");
-        $('#priceId').val("");
-        $('#quantity').val("");
-    }
+    $("#reset-button").on('click', function () {
+        let emptyString = "";
+        $('#txtProductName').val(emptyString);
+        $('#priceId').val(emptyString);
+        $('#quantity').val(emptyString);
+
+    });
 
     function getAllProducts() {
         $.get({
@@ -109,17 +130,19 @@
                 "<td align='center'>" + element.quantity + "</td>" +
                 "<td><button class='btn btn-primary' id='deleteButton'>Delete</button> </td>" +
                 "<td><button class='btn btn-warning' id='updateButton'>Update</button> </td>" +
-                "<td hidden id='id' data-id=" + element.id + "></td></tr>")
+                "<td hidden id='id' value=" + element.id + "></td></tr>")
         })
     }
 
     function deleteProduct(id) {
         $.ajax({
-            url: url + id,
+            url: "http://localhost:8282/products/" + id,
             method: "DELETE",
         }).done(() => {
             alert("Element delete from database")
             getAllProducts();
+        }).fail(function (error) {
+            alert(error);
         })
     }
 
@@ -127,9 +150,29 @@
         let td = this.parentElement;
         let tr = td.parentElement;
         let lastElChild = tr.lastElementChild;
-        let value = lastElChild.dataset("id");
-        console.log(value);
+        let id = $(lastElChild).attr("value");
+        deleteProduct(id);
+    });
+
+    function getProduct(id) {
+        return $.get({
+            url: "http://localhost:8282/products/" + id,
+            method: "GET",
+            dataType: "json"
+        }).done(function (data) {
+            const tab = $('#editForm');
+            return data;
+        });
+    }
+
+    tableBody.on('click', '#updateButton', function () {
+        let td = this.parentElement;
+        let tr = td.parentElement;
+        console.log(tr);
+
+        let lastElChild = tr.lastElementChild;
+        let id = $(lastElChild).attr("value");
+        let product = getProduct(id);
 
     })
-
 </script>
