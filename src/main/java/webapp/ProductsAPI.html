@@ -58,7 +58,6 @@
             <td>Product name</td>
             <td>Quantity</td>
             <td>Price</td>
-            <td>ProductId</td>
         </tr>
         </thead>
         <tbody id="updateTbody">
@@ -66,7 +65,7 @@
             <td><input type="text" id="productNameUpdate" placeholder="Product name"></td>
             <td><input type="text" id="quantityUpdate" placeholder="Quantity"></td>
             <td><input type="text" id="priceUpdate" placeholder="Price"></td>
-            <td><input type="text" id="productId"></td>
+            <input type="text" class="hidden" id="productId">
         </tr>
         </tbody>
         <button class="btn btn-primary hidden" id="saveChanges">Save changes</button>
@@ -169,43 +168,47 @@
             $('#priceUpdate').val(data.price);
             $('#productId').val(data.id);
 
-            $("#saveChanges").on('click', function () {
-                let product = {};
-                product.name = $('#productNameUpdate').val();
-                product.quantity = $('#quantityUpdate').val();
-                product.price = $('#priceUpdate').val();
-                product.id = $('#productId').val();
-                console.log(product);
-                $("#saveChanges").addClass('hidden');
-                $("#tableToUpdate").addClass('hidden');
-
-                let productObj = JSON.stringify(product);
-
-                let url = "http://localhost:8282/products/";
-                let method = "";
-                if (product.id) {
-                    url = url + product.id;
-                    method = "PUT";
-                } else {
-                    method = "POST";
-                }
-
-                $.ajax({
-                    url: url,
-                    method: method,
-                    data: productObj,
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }).done(() => {
-                    alert("Data update/saved!")
-                    getAllProducts();
-                }).fail(error => {
-                    alert(error)
-                })
-            })
         });
+
     }
+
+    $("#saveChanges").on('click', function () {
+        let product = {};
+        product.name = $('#productNameUpdate').val();
+        product.quantity = $('#quantityUpdate').val();
+        product.price = $('#priceUpdate').val();
+        product.id = $('#productId').val();
+        console.log(product);
+        $("#saveChanges").addClass('hidden');
+        $("#tableToUpdate").addClass('hidden');
+
+        let productObj = JSON.stringify(product);
+
+        let url = "http://localhost:8282/products/";
+
+        let method = "";
+
+        if (product.id) {
+            url = url + product.id;
+            method = "PUT";
+        } else {
+            method = "POST";
+        }
+
+        $.ajax({
+            url: url,
+            method: method,
+            data: productObj,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).done(() => {
+            alert("Data update/saved!")
+            getAllProducts();
+        }).fail(error => {
+            alert(error)
+        })
+    })
 
     tableBody.on('click', '#updateButton', function () {
         let td = this.parentElement;
