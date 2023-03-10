@@ -22,6 +22,11 @@ public class BookService {
     private final List<Book> cList = MockBookList.getInstance();
 
     @GET
+    @Path("/exception")
+    public String getHelloMsg(){
+        throw new RuntimeException("ABC");
+    }
+    @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Book> getAllBooks() {
