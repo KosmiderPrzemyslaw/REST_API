@@ -5,9 +5,11 @@
     <title>Title</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.2/css/jquery.dataTables.css"/>
+    <link rel="stylesheet" href="style/style.css">
     <script src="js/jquery-3.4.1.min.js"></script>
 
 </head>
+
 <body>
 
 <div class="row" style="border:  2px solid black; margin: 0 auto; padding: 20px;">
@@ -29,14 +31,21 @@
     <div class="col-md-10">
         <input type="number" id="quantity" class="form-control" placeholder="Quantity">
     </div>
+    <div class="col-md-2">
+        Desciption
+    </div>
+    <div class="col-md-10">
+        <input type="text" id="description" class="form-control" placeholder="Description">
+    </div>
     <div class="col-md-12">
+        <br>
 
         <button class="btn btn-primary" onclick="saveProduct()">Save product</button>
         <button class="btn btn-danger" id="reset-button">Reset</button>
     </div>
 </div>
 <div class="table">
-    <table class="table table-striped" align="center" border="1">
+    <table class="table table-striped" align="center" border="1" style="width: 500px">
         <thead>
         <tr>
             <th scope="col">Product name</th>
@@ -58,6 +67,7 @@
             <td>Product name</td>
             <td>Quantity</td>
             <td>Price</td>
+            <td>Description</td>
         </tr>
         </thead>
         <tbody id="updateTbody">
@@ -65,6 +75,7 @@
             <td><input type="text" id="productNameUpdate" placeholder="Product name"></td>
             <td><input type="text" id="quantityUpdate" placeholder="Quantity"></td>
             <td><input type="text" id="priceUpdate" placeholder="Price"></td>
+            <td><input type="text" id="descriptionUpdate" placeholder="Description"></td>
             <input type="text" class="hidden" id="productId">
         </tr>
         </tbody>
@@ -87,6 +98,7 @@
         objProduct.name = $('#txtProductName').val();
         objProduct.price = $('#priceId').val();
         objProduct.quantity = $('#quantity').val();
+        objProduct.description = $('#description').val();
 
         if (objProduct) {
             $.post({
@@ -128,12 +140,14 @@
 
         tableBody.empty();
         $(data).each(function (index, element) {
-            tableBody.append("<tr><td>" + element.name + "</td>" +
+            tableBody.append("<tr><td>" + element.name + " | " +
+                "<button class='btn btn-primary'  id='productDescription' >Info</button>" +
+                "<hr style='solid-color: black' id='hrLine'><p id='elementDescription'>" + "<b>PRODUCT DESCRIPTION:</b> " + element.description + "</p></td>" +
                 "<td>" + element.price + "</td>" +
                 "<td align='center'>" + element.quantity + "</td>" +
                 "<td><button class='btn btn-primary' id='deleteButton'>Delete</button> </td>" +
                 "<td><button class='btn btn-warning' id='updateButton'>Update</button> </td>" +
-                "<td hidden id='idElement' value=" + element.id + "></td></tr>")
+                "<td hidden id='idElement' value=" + element.id + "></td>")
         })
     }
 
@@ -142,7 +156,7 @@
             url: "http://localhost:8282/products/" + id,
             method: "DELETE",
         }).done(() => {
-            alert("Element delete from database")
+            alert("Element delete from database");
             getAllProducts();
         }).fail(function (error) {
             alert(error);
@@ -166,6 +180,7 @@
             $('#productNameUpdate').val(data.name);
             $('#quantityUpdate').val(data.quantity);
             $('#priceUpdate').val(data.price);
+            $('#descriptionUpdate').val(data.description);
             $('#productId').val(data.id);
 
         });
@@ -177,6 +192,7 @@
         product.name = $('#productNameUpdate').val();
         product.quantity = $('#quantityUpdate').val();
         product.price = $('#priceUpdate').val();
+        product.description = $('#descriptionUpdate').val();
         product.id = $('#productId').val();
         console.log(product);
         $("#saveChanges").addClass('hidden');
@@ -203,17 +219,17 @@
                 'Content-Type': 'application/json'
             }
         }).done(() => {
-            alert("Data update/saved!")
+            alert("Data update/saved!");
             getAllProducts();
         }).fail(error => {
             alert(error)
         })
-    })
+    });
 
     tableBody.on('click', '#updateButton', function () {
         let td = this.parentElement;
         let tr = td.parentElement;
-        console.log(tr);
+        //console.log(tr);
         let lastElChild = tr.lastElementChild;
         let id = $(lastElChild).attr("value");
         let product = getProduct(id);
@@ -221,5 +237,21 @@
         $("#saveChanges").removeClass("hidden");
     });
 
+
+    tableBody.on('click', "#productDescription", function () {
+        console.log(this);
+        let td = this.parentElement;
+        let tr = td.parentElement;
+        let id = $(tr).find("#idElement").attr("value")
+        //console.log(id);
+        let productDescription = $(tr).find("#elementDescription");
+        let hr = $(tr).find("#hrLine");
+
+
+        hr.toggleClass("hidden");
+        productDescription.toggleClass("hidden");
+        console.log(productDescription);
+
+    })
 
 </script>

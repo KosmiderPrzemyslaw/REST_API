@@ -12,6 +12,12 @@ public class Product {
     private final String name;
     private final int quantity;
     private final BigDecimal price;
+    private final String description;
+
+
+    public String getDescription() {
+        return description;
+    }
 
 
     private Product(ProductBuilder builder) {
@@ -19,6 +25,7 @@ public class Product {
         this.name = builder.name;
         this.quantity = builder.quantity;
         this.price = builder.price;
+        this.description = builder.description;
     }
 
     public Product() {
@@ -27,6 +34,7 @@ public class Product {
         this.name = product.getName();
         this.quantity = product.getQuantity();
         this.price = product.getPrice();
+        this.description = product.getDescription();
     }
 
     public long getId() {
@@ -54,6 +62,7 @@ public class Product {
         private String name = "";
         private int quantity = 0;
         private BigDecimal price = BigDecimal.valueOf(0);
+        private String description = "";
 
         public ProductBuilder id(long id) {
             this.id = id;
@@ -72,6 +81,11 @@ public class Product {
 
         public ProductBuilder price(BigDecimal price) {
             this.price = price;
+            return this;
+        }
+
+        public ProductBuilder description(String description) {
+            this.description = description;
             return this;
         }
 

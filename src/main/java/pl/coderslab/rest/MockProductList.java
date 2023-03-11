@@ -12,30 +12,33 @@ public class MockProductList {
     static {
         productList.add(
                 new Product.ProductBuilder().id(counter.getAndIncrement())
-                .name("Buty")
-                .quantity(3)
-                .price(BigDecimal.valueOf(23.60))
-                .build()
+                        .name("Buty")
+                        .quantity(3)
+                        .price(BigDecimal.valueOf(23.60))
+                        .description("Opis buta")
+                        .build()
         );
 
         productList.add(
                 new Product.ProductBuilder().id(counter.getAndIncrement())
-                .name("Spodnie")
-                .quantity(7)
-                .price(BigDecimal.valueOf(55.32))
-                .build()
+                        .name("Spodnie")
+                        .quantity(7)
+                        .price(BigDecimal.valueOf(55.32))
+                        .description("Opis spodni")
+                        .build()
         );
 
         productList.add(
                 new Product.ProductBuilder().id(counter.getAndIncrement())
-                .name("T-Shirt")
-                .quantity(10)
-                .price(BigDecimal.valueOf(49.99))
-                .build()
+                        .name("T-Shirt")
+                        .quantity(10)
+                        .price(BigDecimal.valueOf(49.99))
+                        .description("Opis T shirt")
+                        .build()
         );
     }
 
-    public static void addProduct(Product product){
+    public static void addProduct(Product product) {
         product.setId(counter.getAndIncrement());
         productList.add(product);
     }

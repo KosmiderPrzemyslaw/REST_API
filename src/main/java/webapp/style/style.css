@@ -6,6 +6,9 @@ body{
     padding:0;
     margin:0;
     font-family:Verdana;
+    background-image: url("https://img.freepik.com/darmowe-wektory/kupuj-ze-znakiem-ze-jestesmy-otwarci_52683-38687.jpg?w=2000");
+    background-repeat: no-repeat;
+    background-size: auto;
 }
 
 nav{
