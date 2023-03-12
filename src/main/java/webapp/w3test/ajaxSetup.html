@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("button").on("click", function () {
+                $.ajaxSetup({
+                    url: "http://localhost:8282/books", success: function (res) {
+                        $("div").html(res);
+                    }
+                });
+                $.ajax();
+            });
+        });
+    </script>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div><h2>LET AJAX change this text</h2></div>
+<button>Change Content</button>
+</body>
+</html>

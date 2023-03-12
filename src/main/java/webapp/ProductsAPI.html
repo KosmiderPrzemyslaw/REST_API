@@ -64,10 +64,10 @@
     <table class="table updateTable hidden" id="tableToUpdate" align="center" border="1">
         <thead>
         <tr>
-            <td>Product name</td>
-            <td>Quantity</td>
-            <td>Price</td>
-            <td>Description</td>
+            <th style="color: darkblue ">Product name</th>
+            <th style="color: darkblue">Quantity</th>
+            <th style="color: darkblue">Price</th>
+            <th style="color: darkblue">Description</th>
         </tr>
         </thead>
         <tbody id="updateTbody">
@@ -142,7 +142,7 @@
         $(data).each(function (index, element) {
             tableBody.append("<tr><td>" + element.name + " | " +
                 "<button class='btn btn-primary'  id='productDescription' >Info</button>" +
-                "<hr style='solid-color: black' id='hrLine'><p id='elementDescription'>" + "<b>PRODUCT DESCRIPTION:</b> " + element.description + "</p></td>" +
+                "<hr class='hidden' style='solid-color: black' id='hrLine'><p class='hidden' id='elementDescription'>" + "<b>PRODUCT DESCRIPTION:</b> " + element.description + "</p></td>" +
                 "<td>" + element.price + "</td>" +
                 "<td align='center'>" + element.quantity + "</td>" +
                 "<td><button class='btn btn-primary' id='deleteButton'>Delete</button> </td>" +
@@ -247,10 +247,8 @@
         let productDescription = $(tr).find("#elementDescription");
         let hr = $(tr).find("#hrLine");
 
-
         hr.toggleClass("hidden");
         productDescription.toggleClass("hidden");
-        console.log(productDescription);
 
     })
 
