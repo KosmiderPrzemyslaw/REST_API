@@ -1,2 +1,2 @@
-By using this application, the user using the form can add items to the list.
-I would like to create possibility of deleting and editing individual books from the list. In the application, I use jQuery and Ajax to work with JSON objects.
+By using this application, the user using HTML form can sending items/books to the list in this case i used ajax.POST method.
+I used jQuery and Ajax to work with JSON objects and HTTP methods like POST, DELETE, PUT, GET. User can add, update, delete objects from DB or check more information about books/products. I used backend java server wrote in Jersey to manage data. Furthremore by using $.ajax GET i get all data from backend server and print them into HTML table. 
